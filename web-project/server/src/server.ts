@@ -1,5 +1,14 @@
 import express from 'express';
+import { createConnection } from 'typeorm';
 import routes from './routes';
+
+import dotenv  from 'dotenv';
+
+//Carrega cvariáveis de ambiente
+dotenv.config();
+
+//Pega a porta da variável de ambiente
+const PORT = process.env.PORT || 3333;
 
 //Instancio a aplicação
 const app = express();
@@ -10,7 +19,13 @@ app.use(express.json()); //body-parser
 //Routes
 app.use(routes);
 
-//Levanto a aplicação
-app.listen(3000, () => {
-    console.log(`Running in port 3000`);
+createConnection().then(connection => {
+
+    //Levanto a aplicação
+    app.listen(PORT, () => {
+        console.log(`Running in port ${PORT}`);
+    })
+
+}).catch(error => {
+    console.log('Ops, não conectei no banco de dados', error);
 })

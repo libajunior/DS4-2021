@@ -1,4 +1,4 @@
-import { CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { StatusColumn } from "./StatusColumn";
 import { Task } from "./Task";
 import { User } from "./User";
@@ -8,9 +8,15 @@ export class Project {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, {nullable: true})
+    @Column({nullable: false, length: 50})
+    name: string;
+
+    @Column('text', {nullable: false})
+    description: string;
+
+    @ManyToOne(() => User, {nullable: true, eager: true})
     @JoinColumn({name: 'user_id'})
-    ornwer: User;
+    owner: User;
 
     @OneToMany(() => StatusColumn, statuscolumn => statuscolumn.project, {
         eager: true,

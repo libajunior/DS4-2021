@@ -1,0 +1,9 @@
+{
+    "type": "sqlite",
+    "database": "./src/database/ds4db.sqlite",
+    "logging": ["query"],
+    "entities": [
+        "./src/models/*.ts"
+    ],
+    "synchronize": true
+}
