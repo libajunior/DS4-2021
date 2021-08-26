@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
+import { AppException } from '../exceptions/AppException';
+
 import dotenv from 'dotenv';
 
 //Cerraga variáveis de ambiente
@@ -28,13 +30,13 @@ class TokenController {
                     next();
                 } catch (error) {
                     if (error.name === 'TokenExpiredError') {
-                        return response.status(401).json('O token expirou')
+                        throw new AppException('token-expired', 401);
                     } else {
-                        return response.status(401).json('O token inválido')
+                        throw new AppException('token-invalid', 401);
                     }
                 }
             } else {
-                return response.status(400).json('Um token válido é requirido')
+                throw new AppException('token-bad-request', 400);                
             }
 
         } catch (error) {

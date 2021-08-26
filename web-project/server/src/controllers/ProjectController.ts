@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Project } from "../models/Project";
+import { AppException } from '../exceptions/AppException';
 
 class ProjectController {
 
@@ -28,7 +29,7 @@ class ProjectController {
 
             //Validar se veio o ID por request params
             if (!id) {
-                return response.status(400).json('Parâmetro ID não informado');
+                throw new AppException('bad-request-id', 400);
             }
 
             //Instancio um repositório da classe Project
@@ -39,7 +40,7 @@ class ProjectController {
 
             //Se não encontrar, retorna 404
             if (!found) {
-                return response.status(404).json('Projeto não encontrado');
+                throw new AppException('not-found', 404);
             }
 
             //Retorno o projeto
@@ -78,7 +79,7 @@ class ProjectController {
 
             //Validar se veio o ID por request params
             if (!id) {
-                return response.status(400).json('Parâmetro ID não informado');
+                throw new AppException('bad-request-id', 400);
             }
 
             //Instancio um repositório da classe Project
@@ -89,7 +90,7 @@ class ProjectController {
 
             //Se não encontrar, retorna 404
             if (!found) {
-                return response.status(404).json('Projeto não encontrado');
+                throw new AppException('not-found', 404);
             }
 
             //Atualizo o projeto com os novos dados vindo do request body
@@ -109,37 +110,33 @@ class ProjectController {
      //Removo o projeto
      public async remove(request: Request, response: Response) {
         try {
-            try {
-                //Pegar o ID do projeto do request params
-                const { id } = request.params;
-    
-                //Validar se veio o ID por request params
-                if (!id) {
-                    return response.status(400).json('Parâmetro ID não informado');
-                }
-    
-                //Instancio um repositório da classe Project
-                const repository = getRepository(Project);
-    
-                //Busco o projeto com o ID passado por parametro
-                const found = await repository.findOne(id);
-    
-                //Se não encontrar, retorna 404
-                if (!found) {
-                    return response.status(404).json('Projeto não encontrado');
-                }
-    
-                //Removo o objeto
-                repository.delete(found);
+            //Pegar o ID do projeto do request params
+            const { id } = request.params;
 
-                //Retorno o status 204 avisando que foi excluído e não tem retorno
-                return response.status(204).json();
-            } catch (error) {
-                return response.status(error.code).json(error)
-            } 
+            //Validar se veio o ID por request params
+            if (!id) {
+                throw new AppException('bad-request-id', 400);
+            }
+
+            //Instancio um repositório da classe Project
+            const repository = getRepository(Project);
+
+            //Busco o projeto com o ID passado por parametro
+            const found = await repository.findOne(id);
+
+            //Se não encontrar, retorna 404
+            if (!found) {
+                throw new AppException('not-found', 404);
+            }
+
+            //Removo o objeto
+            repository.delete(found);
+
+            //Retorno o status 204 avisando que foi excluído e não tem retorno
+            return response.status(204).json();
         } catch (error) {
             return response.status(error.code).json(error)
-        } 
+        }
      }
 }
 

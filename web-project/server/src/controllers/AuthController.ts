@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../models/User';
 import { sign } from 'jsonwebtoken'
+import { AppException } from '../exceptions/AppException';
+
 import dotenv from 'dotenv';
 
 //Carrega variáveis de ambiente
@@ -25,7 +27,7 @@ class AuthController {
             return response.status(201).json( created );
             
         } catch (error) {
-            return response.status(error.code).json({message: error.message});
+            return response.status(error.code).json(error);
         }
 
     }
@@ -45,12 +47,12 @@ class AuthController {
 
             //To-do: Se usuario inválido, responder "Usuário Inválido"
             if (!foundUser) {
-                return response.status(403).json({message: 'auth-invalid-username'});
+                throw new AppException('auth-invalid-username', 403);
             }
 
             //To-do: Validar a senha: se senha inválida, responder "Senha Inválida"
             if (foundUser.password != password) {
-                return response.status(403).json({message: 'auth-invalid-password'});
+                throw new AppException('auth-invalid-password', 403);
             }
 
             //To-do: Se usuário e senha corretos, devolver um token (JWT) com os dados básicos do usuário
@@ -72,7 +74,7 @@ class AuthController {
 
             return response.json({ token: token })
         } catch (error) {
-            response.status(error.code).json({message: error.message});
+            response.status(error.code).json(error);
         }
 
     }

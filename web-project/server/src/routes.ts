@@ -21,5 +21,4 @@ routes.route('/projects/:id')
     .put(ProjectController.update)
     .delete(ProjectController.remove);
 
-
 export default routes;
