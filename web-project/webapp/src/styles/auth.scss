@@ -1,0 +1,80 @@
+.page-auth {
+    display: flex;
+    height: 100vh;
+    align-items: stretch;
+
+    aside {
+        flex: 5;
+    }
+
+    main {
+        flex: 6;
+        padding: 0 32px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            h4 {
+                color: #6158f0;
+                margin: 64px 0 24px;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    }
+}
+
+#page-signin {
+    main {
+        align-items: center;
+
+        .main-content {
+            align-items: stretch;
+            max-width: 320px;
+            text-align: center;
+
+            a {
+                margin-top:16px;
+                color: #6158f0;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+#page-signup {
+    .main-content {
+        padding: 0 80px;
+
+        h4 {
+            color: #29292e;
+        }
+
+        form {
+            .form-inline {
+                display: flex;
+                gap: 64px;
+            }
+
+            .toolbar {
+                margin-top:16px;
+                padding: 0;
+                gap: 8px;
+                justify-content: flex-end;
+            }
+        }
+    }
+}

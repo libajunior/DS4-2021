@@ -4,7 +4,7 @@ import './style.scss';
 
 export function AuthAside() {
     return (
-        <aside>
+        <aside className="auth-aside">
             <img src={imageAside} alt="Imagem que ilustra uma gestão de projetos" />
             
             <Typography variant="h4">

@@ -1,0 +1,18 @@
+.auth-aside {
+    background-color: #AEAAF7;
+    color: #FFF;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px;
+
+    img {
+        max-width: 450px;
+    }
+
+    h4 {
+        color: #6158F0;
+        margin-top: 32px;
+    }
+}
