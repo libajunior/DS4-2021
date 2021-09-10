@@ -1,17 +1,22 @@
 import { Button, TextField, Typography } from "@material-ui/core";
 import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { ErrorType } from "../App";
 import { AuthAside } from "../components/AuthAside";
+import { User } from "../contexts/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 import '../styles/auth.scss';
 
 export function SignIn() {
+    const history = useHistory();
 
     const [error, setError] = useState<ErrorType>({} as ErrorType);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const {signIn, setUser} = useAuth();
 
     function handleSignIn(event: FormEvent) {
         event.preventDefault();
@@ -32,7 +37,23 @@ export function SignIn() {
             })
         }
 
-        console.log('->', username)
+        const credential = {
+            username: username,
+            password: password
+        }
+
+        signIn(credential)
+            .then((result) => {
+                console.log('result ->', result);
+                setUser(result.data as User);
+                history.push('/home');
+            })
+            .catch(error => {
+                setError({
+                    type: error.response.data.name,
+                    message: error.response.data.message
+                })
+            });
     }
 
     return (
@@ -51,8 +72,8 @@ export function SignIn() {
                             fullWidth
                             value={username}
                             onChange={event => setUsername(event.target.value)}
-                            error={error.type === 'invalid-username'} 
-                            helperText={error.message}
+                            error={error.type === 'auth-invalid-username'} 
+                            helperText={error.type === 'auth-invalid-username' && error.message}
                         />
 
                         <TextField 
@@ -62,8 +83,8 @@ export function SignIn() {
                             fullWidth
                             value={password}
                             onChange={event => setPassword(event.target.value)}
-                            error={error.type === 'invalid-password'} 
-                            helperText={error.message}
+                            error={error.type === 'auth-invalid-password'} 
+                            helperText={error.type === 'auth-invalid-password' && error.message}
                         />
 
                         <Button

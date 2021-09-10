@@ -1,6 +1,7 @@
 import express from 'express';
 import { createConnection } from 'typeorm';
 import routes from './routes';
+import cors from 'cors';
 
 import dotenv  from 'dotenv';
 
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 3333;
 const app = express();
 
 //Middleware
+app.use(cors());
 app.use(express.json()); //body-parser
 
 //Routes

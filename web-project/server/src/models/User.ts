@@ -14,6 +14,9 @@ export class User {
     @Column({nullable: false})
     password: string;
 
+    @Column({length: 10})
+    avatar: string;
+
     @Column({nullable: false, length: 1})
     active: string;
 

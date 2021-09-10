@@ -14,6 +14,7 @@ class AuthController {
     public async create(request: Request, response: Response) {
         
         try {
+            
             //Instancio um Repository da classe User
             const repository = getRepository(User);
 
@@ -25,7 +26,7 @@ class AuthController {
             
             //Retorno o objeto inserido
             return response.status(201).json( created );
-            
+
         } catch (error) {
             return response.status(error.code).json(error);
         }
@@ -47,32 +48,31 @@ class AuthController {
 
             //To-do: Se usuario inválido, responder "Usuário Inválido"
             if (!foundUser) {
-                throw new AppException('auth-invalid-username', 403);
+                throw new AppException('Usuário inválido', 'auth-invalid-username', 403);
             }
 
             //To-do: Validar a senha: se senha inválida, responder "Senha Inválida"
             if (foundUser.password != password) {
-                throw new AppException('auth-invalid-password', 403);
+                throw new AppException('Senha inválida', 'auth-invalid-password', 403);
             }
 
             //To-do: Se usuário e senha corretos, devolver um token (JWT) com os dados básicos do usuário
-            const payload = { 
-                user:  {
-                    id: foundUser.id,
-                    name: foundUser.name,
-                    email: foundUser.email
-                }
-            };
+            const user = {
+                id: foundUser.id,
+                name: foundUser.name,
+                email: foundUser.email,
+                avatar: foundUser.avatar
+            }
             
             //Carrega a chave da criptografia
             const criptoKey = process.env.CRIPTO_KEY as string;
 
             //Monta o token para ser retornado
-            const token = sign(payload, criptoKey, {
+            const token = sign(user, criptoKey, {
                 expiresIn: '1h'
             })
 
-            return response.json({ token: token })
+            return response.json({ token: token, user: user })
         } catch (error) {
             response.status(error.code).json(error);
         }

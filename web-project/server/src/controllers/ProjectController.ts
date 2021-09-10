@@ -29,7 +29,7 @@ class ProjectController {
 
             //Validar se veio o ID por request params
             if (!id) {
-                throw new AppException('bad-request-id', 400);
+                throw new AppException('Parâmetro ID não informado', 'bad-request-id', 400);
             }
 
             //Instancio um repositório da classe Project
@@ -40,7 +40,7 @@ class ProjectController {
 
             //Se não encontrar, retorna 404
             if (!found) {
-                throw new AppException('not-found', 404);
+                throw new AppException('Recurso não encontrado', 'not-found', 404);
             }
 
             //Retorno o projeto
@@ -79,7 +79,7 @@ class ProjectController {
 
             //Validar se veio o ID por request params
             if (!id) {
-                throw new AppException('bad-request-id', 400);
+                throw new AppException('Parâmetro ID não informado', 'bad-request-id', 400);
             }
 
             //Instancio um repositório da classe Project
@@ -90,7 +90,7 @@ class ProjectController {
 
             //Se não encontrar, retorna 404
             if (!found) {
-                throw new AppException('not-found', 404);
+                throw new AppException('Recurso não encontrado', 'not-found', 404);
             }
 
             //Atualizo o projeto com os novos dados vindo do request body
@@ -115,7 +115,7 @@ class ProjectController {
 
             //Validar se veio o ID por request params
             if (!id) {
-                throw new AppException('bad-request-id', 400);
+                throw new AppException('Parâmetro ID não informado', 'bad-request-id', 400);
             }
 
             //Instancio um repositório da classe Project
@@ -126,7 +126,7 @@ class ProjectController {
 
             //Se não encontrar, retorna 404
             if (!found) {
-                throw new AppException('not-found', 404);
+                throw new AppException('Recurso não encontrado', 'not-found', 404);
             }
 
             //Removo o objeto

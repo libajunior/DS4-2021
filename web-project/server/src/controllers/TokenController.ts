@@ -30,13 +30,13 @@ class TokenController {
                     next();
                 } catch (error) {
                     if (error.name === 'TokenExpiredError') {
-                        throw new AppException('token-expired', 401);
+                        throw new AppException('Token expirado', 'token-expired', 401);
                     } else {
-                        throw new AppException('token-invalid', 401);
+                        throw new AppException('Token inválido', 'token-invalid', 401);
                     }
                 }
             } else {
-                throw new AppException('token-bad-request', 400);                
+                throw new AppException('É preciso informar um token válido', 'token-bad-request', 400);                
             }
 
         } catch (error) {
