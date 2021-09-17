@@ -3,7 +3,6 @@ import { FormEvent, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ErrorType } from "../App";
 import { AuthAside } from "../components/AuthAside";
-import { User } from "../contexts/AuthContext";
 import { useAuth } from "../hooks/useAuth";
 
 import '../styles/auth.scss';
@@ -16,7 +15,7 @@ export function SignIn() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const {signIn, setUser} = useAuth();
+    const { user, signIn } = useAuth();
 
     function handleSignIn(event: FormEvent) {
         event.preventDefault();
@@ -43,10 +42,8 @@ export function SignIn() {
         }
 
         signIn(credential)
-            .then((result) => {
-                console.log('result ->', result);
-                setUser(result.data as User);
-                history.push('/home');
+            .then(() => {
+                history.push('/');
             })
             .catch(error => {
                 setError({
@@ -62,7 +59,7 @@ export function SignIn() {
             <main>
                 <div className="main-content">
                     <Typography variant="h4">
-                        Seja bem vindo!
+                        Seja bem vindo! {user?.name}
                     </Typography>
 
                     <form onSubmit={handleSignIn}>
