@@ -28,7 +28,8 @@ class TokenController {
 
                     //Tudo certo, então segue para o próximo fluxo
                     next();
-                } catch (error) {
+                } catch (e) {
+                    const error = e as AppException;
                     if (error.name === 'TokenExpiredError') {
                         throw new AppException('Token expirado', 'token-expired', 401);
                     } else {
@@ -39,7 +40,8 @@ class TokenController {
                 throw new AppException('É preciso informar um token válido', 'token-bad-request', 400);                
             }
 
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             return response.status(error.code).json(error)
         }
     }

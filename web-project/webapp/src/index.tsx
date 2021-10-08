@@ -10,9 +10,7 @@ import '@fontsource/roboto/700.css';
 import './styles/global.scss';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
 

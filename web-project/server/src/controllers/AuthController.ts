@@ -27,7 +27,8 @@ class AuthController {
             //Retorno o objeto inserido
             return response.status(201).json( created );
 
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             return response.status(error.code).json(error);
         }
 
@@ -69,11 +70,12 @@ class AuthController {
 
             //Monta o token para ser retornado
             const token = sign(user, criptoKey, {
-                expiresIn: '1h'
+                expiresIn: '1d'
             })
 
             return response.json({ token: token, user: user })
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             response.status(error.code).json(error);
         }
 

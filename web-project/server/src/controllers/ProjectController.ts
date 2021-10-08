@@ -16,7 +16,8 @@ class ProjectController {
 
             //Retorno a lista de projetos
             return response.json(projects);
-       } catch (error) {
+       } catch (e) {
+           const error = e as AppException;
            return response.status(error.code).json(error)
        } 
     }
@@ -45,7 +46,8 @@ class ProjectController {
 
             //Retorno o projeto
             return response.json(found);
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             return response.status(error.code).json(error)
         } 
      }
@@ -63,7 +65,8 @@ class ProjectController {
             //Retorno o objeto inserido
             return response.status(201).json(project);
 
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             return response.status(error.code).json(error)
         } 
      }
@@ -102,7 +105,8 @@ class ProjectController {
             //Retorno o objeto atualizado
             return response.json(novo);
 
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             return response.status(error.code).json(error)
         } 
      }
@@ -134,7 +138,8 @@ class ProjectController {
 
             //Retorno o status 204 avisando que foi excluído e não tem retorno
             return response.status(204).json();
-        } catch (error) {
+        } catch (e) {
+            const error = e as AppException;
             return response.status(error.code).json(error)
         }
      }
