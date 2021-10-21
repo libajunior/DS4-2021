@@ -1,4 +1,4 @@
-import { AppBar, Button, Card, CardActionArea, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, TextField, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Avatar, Button, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, TextField, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import SortIcon from '@material-ui/icons/Sort';
 import { useEffect, useState } from "react";
@@ -7,9 +7,14 @@ import { Header } from "../../components/Header";
 import { useAuth } from "../../hooks/useAuth";
 import serverAPI from "../../services/serverAPI";
 
+import imgBgCard from '../../assets/img/card-background.png';
+
 import './style.scss';
+import { useHistory } from "react-router";
+import { Project } from "../../@types";
 
 export function Home() {
+    const history = useHistory();
 
     const { user, token } = useAuth();
 
@@ -82,6 +87,10 @@ export function Home() {
             })
     }
 
+    function handleOpenProject(project: Project): void {
+        history.push(`/projects/${project.id}`);
+    }
+
     return (
         <div id="page-home">
             <Header />
@@ -126,13 +135,41 @@ export function Home() {
                             return (
                                 <div
                                     key={project.id}
-                                    className="project-card-content">
+                                    className="project-card-container">
                                     <Card
                                         className="project-card">
-                                        <CardActionArea>
+                                        <CardActionArea
+                                            onClick={() => handleOpenProject(project)}>
                                             
+                                            <CardContent
+                                                className="project-card-title">
+                                                {project.name.length >= 28 ? (
+
+                                                    <Tooltip title={project.name}>
+                                                        <Typography variant="h6" component="span">
+                                                            {`${project.name.substring(0, 25)}...`}
+                                                        </Typography>   
+                                                    </Tooltip>
+
+                                                ) : (
+
+                                                    <Typography component="span">
+                                                        {project.name}
+                                                    </Typography>
+
+                                                ) }
+                                            </CardContent>
+
+                                            <CardMedia
+                                                className="project-card-media"
+                                                image={imgBgCard}/>
                                         </CardActionArea>    
-                                    </Card>    
+                                    </Card> 
+
+                                    <Avatar
+                                        className="project-avatar"
+                                        src={`../assets/avatar/${project.owner.avatar}`} 
+                                        alt={project.owner.name}/>   
                                 </div>
                             )
                         })}

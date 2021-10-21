@@ -1,17 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { CredentialType, User } from "../@types";
 import serverAPI from "../services/serverAPI";
-
-export type User = {
-    id: number;
-    name: string;
-    email: string;
-    avatar: string;
-}
-
-export type CredentialType = {
-    username: string;
-    password: string;
-}
 
 type AuthContextType = {
     user: User | undefined;

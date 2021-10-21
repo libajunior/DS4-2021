@@ -3,25 +3,54 @@
         padding-top: 20px;
         flex-direction: column;
 
-        .app-bar {
-            background-color: transparent;
-            box-shadow: none;
-            border-bottom: 2px solid #5168F0;
-
-            h5 {
-                font-weight: 300;
-                flex-grow: 1;
-            }
-
-            > div {
-                gap: 8px;
-            }
-        }
-
         .project-container {
             display: flex;
             width: 100%;
             flex-direction: column;
+        }
+        .project-content {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            padding: 32px;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .project-card-container {
+            position: relative;
+
+            .project-card {
+                width: 250px;
+
+                .project-card-title {
+                    background-color: #fff;
+                    border: 1px solid #Bec3c8;
+                    overflow: hidden;
+                    padding: 8px;
+
+                    span {
+                        white-space: pre;
+                        color: #292929;
+                        font-size: 16px;
+                        margin-right: 8px;
+                        width: 225px;
+                        overflow: hidden;
+                    }
+
+                }
+
+                .project-card-media {
+                    height: 140px;
+                    background-color: #f8f8f8;
+                    background-size: 60%;
+                }
+            }
+            .project-avatar {
+                position: absolute;
+                right: -20px;
+                bottom: -20px;
+                border: 2px solid #Bec3c8;
+            }
         }
     }
     

@@ -42,3 +42,18 @@ body, input, button, select, text {
         width: 1396px;
     }
 }
+
+main .app-bar {
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 2px solid #5168F0;
+
+    h5 {
+        font-weight: 300;
+        flex-grow: 1;
+    }
+
+    > div {
+        gap: 8px;
+    }
+}
