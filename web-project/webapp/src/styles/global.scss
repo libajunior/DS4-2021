@@ -42,7 +42,9 @@ body, input, button, select, text {
         width: 1396px;
     }
 }
-
+main {
+    max-width: 100%;
+}
 main .app-bar {
     background-color: transparent;
     box-shadow: none;

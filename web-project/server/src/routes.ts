@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AuthController from './controllers/AuthController';
 import ProjectController from './controllers/ProjectController';
+import StatusColumnController from './controllers/StatusColumnController';
 import TokenController from './controllers/TokenController';
 
 const routes = Router();
@@ -21,4 +22,9 @@ routes.route('/projects/:id')
     .put(ProjectController.update)
     .delete(ProjectController.remove);
 
+//STATUS COLUMNS
+routes.route('/projects/:projectId/statuscolumn')
+    .all(TokenController.validate)    
+    .post(StatusColumnController.create);
+    
 export default routes;
