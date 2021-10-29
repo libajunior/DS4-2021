@@ -9,18 +9,18 @@ export class Task {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => StatusColumn, {nullable: true})
+    @ManyToOne(() => StatusColumn, {eager: true})
     @JoinColumn({name: 'statuscolumn_id'})
     statusColumn: StatusColumn;
 
-    @ManyToOne(() => User, {nullable: true})
+    @ManyToOne(() => User, {eager: true})
     @JoinColumn({name: 'user_id'})
     owner: User;
 
     @Column({nullable: false})
     title: string;
 
-    @Column('text', {nullable: true})
+    @Column({type: 'text', nullable: true})
     description: string;
 
     @Column()
@@ -28,7 +28,8 @@ export class Task {
 
     @OneToMany(() => TaskComment, taskcomment => taskcomment.task, {
         eager: true,
-        cascade: true
+        cascade: true,
+        nullable: true
     })
     comments: TaskComment[];
 
@@ -39,10 +40,10 @@ export class Task {
     @Column()
     percentage: number;
 
-    @Column({type: 'date'})
+    @Column({type: 'date', nullable: true})
     startDate: Date;
 
-    @Column({type: 'date'})
+    @Column({type: 'date', nullable: true})
     endDate: Date;
 
     @CreateDateColumn({name: 'created_at'})

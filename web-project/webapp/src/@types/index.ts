@@ -11,9 +11,26 @@ export type CredentialType = {
 }
 
 export type Project = {
-    id: number;
+    id?: number;
     name: string;
     owner: User;
     description: string;
 }
 
+export type StatusColumn = {
+    id?: number;
+    name: string;
+    color: string;
+}
+
+export type Task = {
+    id?: number;
+    statusColumn: StatusColumn;
+    title: string;
+    description: string;
+    owner: User;
+    priority: number;
+    percentage: number;
+    startDate: Date;
+    endDate: Date;
+}

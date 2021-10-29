@@ -41,5 +41,42 @@
             align-items: center;
             justify-content: space-between;
         }
+        .kanban-body {
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+
+            .kanban-card {
+                border: 1px solid #ddd;
+                padding: 8px;
+                background-color: #fff;
+                border-radius: 4px;
+
+                textarea {
+                    width: 100%;
+                    background: none;
+                    border: none;
+                    resize: none;
+                    font-size: 16px;
+                    outline: none;
+                }
+            
+                .kanban-card-action {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    gap: 4px;
+                    margin-top: 8px;
+                }
+
+                button {
+                    font-size: 12px;
+                    text-transform: none;
+                    padding: 4px 8px !important;
+                    font-weight: normal;
+                    box-shadow: none;
+                }
+            }
+        }
     }
 }

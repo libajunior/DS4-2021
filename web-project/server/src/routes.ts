@@ -2,6 +2,7 @@ import { Router } from 'express';
 import AuthController from './controllers/AuthController';
 import ProjectController from './controllers/ProjectController';
 import StatusColumnController from './controllers/StatusColumnController';
+import TaskController from './controllers/TaskController';
 import TokenController from './controllers/TokenController';
 
 const routes = Router();
@@ -23,8 +24,14 @@ routes.route('/projects/:id')
     .delete(ProjectController.remove);
 
 //STATUS COLUMNS
-routes.route('/projects/:projectId/statuscolumn')
+routes.route('/projects/:projectId/statuscolumns')
     .all(TokenController.validate)    
     .post(StatusColumnController.create);
+
+//TASKS
+routes.route('/projects/:projectId/tasks')
+    .all(TokenController.validate)    
+    .get(TaskController.findByProject)
+    .post(TaskController.create);
     
 export default routes;
