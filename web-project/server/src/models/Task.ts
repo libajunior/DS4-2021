@@ -1,7 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Project } from "./Project";
 import { StatusColumn } from "./StatusColumn";
-import { TaskComment } from "./TaskComment";
 import { User } from "./User";
 
 @Entity('task')
@@ -25,13 +24,6 @@ export class Task {
 
     @Column()
     priority: number;
-
-    @OneToMany(() => TaskComment, taskcomment => taskcomment.task, {
-        eager: true,
-        cascade: true,
-        nullable: true
-    })
-    comments: TaskComment[];
 
     @ManyToOne(() => Project, {nullable: true})
     @JoinColumn({name: 'project_id'})  

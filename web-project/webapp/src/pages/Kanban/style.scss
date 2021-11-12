@@ -75,8 +75,48 @@
                     padding: 4px 8px !important;
                     font-weight: normal;
                     box-shadow: none;
+                }                
+            }
+            .card-task {
+                cursor: pointer;
+
+                h5 {
+                    font-weight: 500;
+                }
+                &-detail {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 16px 0;
+                }
+                &-avatar {
+                    width: 24px;
+                    height: 24px;
+                }
+                &:hover {
+                    background-color: #f8f8f8;
                 }
             }
+        }
+    }    
+}
+.dialog-tab-content {
+    padding: 16px;
+    height: 180px;
+
+    .form-inline {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 16px 0;
+
+        fieldset {
+            width: 100%;
+        }
+        legend {
+            color: rgba(0,0,0,0.54);
         }
     }
 }

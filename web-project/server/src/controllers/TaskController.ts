@@ -30,8 +30,6 @@ class TaskController {
                 }
             });
 
-            console.table(tasks)
-
             //Retorno as tarefas do projeto
             return response.json(tasks);
 
@@ -72,6 +70,49 @@ class TaskController {
             return response.status(201).json(statusColumn);
 
         } catch (e) {
+            const error = e as AppException;
+            return response.status(error.code).json(error)
+        } 
+    }
+
+    public async update(request: Request, response: Response) {
+        try {
+            //Pega a task do request body
+            const newTask = request.body;
+
+            //Pego o ID do projeto para verificar se ele existe
+            const { projectId, taskId } = request.params;
+
+            //Instancio um repositório da classe Project
+            const repositoryProject = getRepository(Project);
+
+            //Busco no banco se existe um projeto com o ID passado por parametro
+            const foundProject = await repositoryProject.findOne(projectId);
+
+            if (!foundProject) {
+                throw new AppException('Projeto não encontrado', 'not-found', 404);
+            }
+            console.log('to aqui')
+            //Instancio um repositório da classe Task
+            const repositoryTask = getRepository(Task);
+
+            //Busco no banco se existe uma tarefa com o ID passado por parametro
+            const foundTask = await repositoryTask.findOne(taskId);
+
+            if (!foundTask) {
+                throw new AppException('Tarefa não encontrada', 'not-found', 404);
+            }
+
+            //Atualizo a tarefa com os dados enviados no request body
+            await repositoryTask.update(foundTask.id, newTask);
+
+            //Atualizo o ID com o mesmo do parametro
+            newTask.id = foundTask.id;
+
+            //Retorno a tarefa atualizada
+            return response.json(newTask);
+
+        } catch (e) {console.log('PAU', e)
             const error = e as AppException;
             return response.status(error.code).json(error)
         } 

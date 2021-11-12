@@ -33,5 +33,8 @@ routes.route('/projects/:projectId/tasks')
     .all(TokenController.validate)    
     .get(TaskController.findByProject)
     .post(TaskController.create);
+
+routes.route('/projects/:projectId/tasks/:taskId')
+    .put(TaskController.update);    
     
 export default routes;
