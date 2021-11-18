@@ -1,18 +1,18 @@
-import { AppBar, Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, LinearProgress, Slider, Tab, Tabs, TextField, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import { AppBar, Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, LinearProgress, Slider, Snackbar, Tab, Tabs, TextField, Toolbar, Tooltip, Typography } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AddIcon from '@material-ui/icons/Add';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { StatusColumn, Task} from '../../@types';
+import { StatusColumn, Task } from '../../@types';
 import { ErrorType } from '../../App';
 import { Header } from '../../components/Header';
 import { useAuth } from '../../hooks/useAuth';
 import serverAPI from '../../services/serverAPI';
-import {TwitterPicker, ColorResult} from 'react-color';
+import { TwitterPicker, ColorResult } from 'react-color';
 
 import './style.scss';
-import { Rating } from '@material-ui/lab';
+import { Alert, Rating } from '@material-ui/lab';
 
 type ProjectParams = {
     id: string;
@@ -24,6 +24,8 @@ export function Kanban() {
     const projectId = Number(params.id);
 
     const [error, setError] = useState({} as ErrorType);
+    const [success, setSuccess] = useState(false);
+    const [messageSuccess, setMessageSuccess] = useState('');
 
     const [task, setTask] = useState<Task>({} as Task);
     const [tasks, setTasks] = useState<Task[]>([] as Task[]);
@@ -41,7 +43,7 @@ export function Kanban() {
     const [openDialogColumn, setOpenDialogColumn] = useState(false);
     const [columnName, setColumnName] = useState('');
     const [columnColor, setColumnColor] = useState('#FF6900');
-    
+
 
     const { token, user } = useAuth();
 
@@ -104,7 +106,10 @@ export function Kanban() {
         serverAPI.post(`/projects/${project.id}/statuscolumns`, column)
             .then(result => {
                 setOpenDialogColumn(false);
-                setProject({...project, statusColumns: [...project.statusColumns, result.data]})
+                setProject({ ...project, statusColumns: [...project.statusColumns, result.data] })
+
+                setSuccess(true);
+                setMessageSuccess('Coluna criada com sucesso!')
             })
             .catch(error => {
                 setError({
@@ -118,7 +123,7 @@ export function Kanban() {
     }
 
     function handleAddTask(statusColumn: StatusColumn) {
-        
+
         setTask({
             statusColumn: statusColumn,
             owner: user,
@@ -127,7 +132,7 @@ export function Kanban() {
             priority: 0,
             percentage: 0
         } as Task);
-        
+
         setAdding(true);
     }
     function handleCancelAddTask() {
@@ -143,8 +148,11 @@ export function Kanban() {
             .then(result => {
                 setAdding(false);
                 setTask({} as Task);
-                
+
                 setTasks([...tasks, result.data])
+
+                setSuccess(true);
+                setMessageSuccess('Tarefa criada com sucesso!')
             })
             .catch(error => {
                 setError({
@@ -171,8 +179,11 @@ export function Kanban() {
 
                 const filteredTasks = tasks.filter(itemFilter => itemFilter.id !== task.id);
                 setTasks([...filteredTasks, result.data])
-                
+
                 setTask({} as Task);
+
+                setSuccess(true);
+                setMessageSuccess('Tarefa atualizada com sucesso!')
             })
             .catch(error => {
                 setError({
@@ -197,7 +208,7 @@ export function Kanban() {
                         <Typography variant="h5" color="primary">
                             {project.name}
                         </Typography>
-                        
+
                         <IconButton title="Ordenar">
                             <MoreVertIcon color="primary" />
                         </IconButton>
@@ -209,15 +220,15 @@ export function Kanban() {
                 <div className="kanban-content">
                     {project.statusColumns && project.statusColumns.map((statusColumn: any) => {
                         return (
-                            <div 
+                            <div
                                 key={statusColumn.id}
                                 className="kanban-column kanban-column-content"
-                                style={{'borderTopColor': statusColumn.color}}>
+                                style={{ 'borderTopColor': statusColumn.color }}>
                                 <div className="kanban-header">
                                     <Typography variant="subtitle1">
                                         {statusColumn.name}
                                     </Typography>
-                                
+
                                     <Tooltip title="Adicionar tarefa">
                                         <IconButton
                                             onClick={() => handleAddTask(statusColumn)}
@@ -230,44 +241,44 @@ export function Kanban() {
                                     {tasks.filter(item => statusColumn.id === item.statusColumn.id).map(task => {
                                         return (
                                             <div
-                                                key={task.id}                                                 
+                                                key={task.id}
                                                 className="kanban-card card-task"
                                                 onClick={() => handleOpenTask(task)}>
-                                                    <Typography variant="body2" component="h5">
-                                                        {task.title}
-                                                    </Typography>
+                                                <Typography variant="body2" component="h5">
+                                                    {task.title}
+                                                </Typography>
 
-                                                    <div className="card-task-detail">
-                                                        <Rating
-                                                            name="read-only"
-                                                            readOnly
-                                                            size="small"
-                                                            value={task.priority}
-                                                            emptyIcon={<StarBorderIcon fontSize="inherit" />}
-                                                        />
-                                                        <Avatar
-                                                            className="card-task-avatar"
-                                                            alt={task.owner.name}
-                                                            src={`../assets/avatar/${task.owner.avatar}`}
-                                                        />
-                                                    </div>
-                                                    
-                                                    <LinearProgress
-                                                        variant="determinate"
-                                                        value={task.percentage}
+                                                <div className="card-task-detail">
+                                                    <Rating
+                                                        name="read-only"
+                                                        readOnly
+                                                        size="small"
+                                                        value={task.priority}
+                                                        emptyIcon={<StarBorderIcon fontSize="inherit" />}
                                                     />
+                                                    <Avatar
+                                                        className="card-task-avatar"
+                                                        alt={task.owner.name}
+                                                        src={`../assets/avatar/${task.owner.avatar}`}
+                                                    />
+                                                </div>
+
+                                                <LinearProgress
+                                                    variant="determinate"
+                                                    value={task.percentage}
+                                                />
                                             </div>
                                         );
                                     })}
                                     {(task.statusColumn && adding) && (
-                                        <div 
+                                        <div
                                             className="kanban-card"
                                             hidden={statusColumn.id !== task.statusColumn.id}>
                                             <textarea
                                                 autoFocus
                                                 value={task.title}
-                                                onChange={event => setTask({...task, title: event.target.value})}
-                                                rows={2}/>
+                                                onChange={event => setTask({ ...task, title: event.target.value })}
+                                                rows={2} />
 
                                             <div className="kanban-card-action">
                                                 <Button
@@ -286,7 +297,7 @@ export function Kanban() {
                                                     Adicionar
                                                 </Button>
                                             </div>
-                                            
+
                                         </div>
                                     )}
                                 </div>
@@ -339,13 +350,13 @@ export function Kanban() {
                         color={columnColor}
                         width="100%"
                         onChange={handleSelectColor}
-                         />
-                    
+                    />
+
 
                 </DialogContent>
 
                 <DialogActions>
-                    
+
                     {loading && <CircularProgress size={24} />}
 
                     <Button
@@ -378,7 +389,7 @@ export function Kanban() {
                     Editar Tarefa
                 </DialogTitle>
 
-                <DialogContent>                  
+                <DialogContent>
                     <Tabs value={abaAtiva}
                         onChange={handleMudarAbaAtiva}
                         indicatorColor="primary">
@@ -387,7 +398,7 @@ export function Kanban() {
                     </Tabs>
 
                     {abaAtiva === 'geral' ? (
-                        <div className="dialog-tab-content">                            
+                        <div className="dialog-tab-content">
                             <TextField
                                 fullWidth
                                 label="Título da tarefa"
@@ -396,7 +407,7 @@ export function Kanban() {
                                 type="text"
                                 margin="normal"
                                 value={task.title}
-                                onChange={event => setTask({...task, title: event.target.value})}
+                                onChange={event => setTask({ ...task, title: event.target.value })}
                                 error={error.type === 'invalid-task-title'}
                                 helperText={error.type === 'invalid-task-title' && error.message}
                                 disabled={loading} />
@@ -411,7 +422,7 @@ export function Kanban() {
                                         name="priority"
                                         value={task.priority}
                                         emptyIcon={<StarBorderIcon fontSize="inherit" />}
-                                        onChange={(event,newValue) => setTask({...task, priority: newValue || 0})}
+                                        onChange={(event, newValue) => setTask({ ...task, priority: newValue || 0 })}
                                     />
                                 </Box>
                                 <Box component="fieldset" borderColor="transparent">
@@ -425,11 +436,11 @@ export function Kanban() {
                                         max={100}
                                         step={5}
                                         valueLabelDisplay="auto"
-                                        onChange={(event,newValue) => setTask({...task, percentage: newValue as number || 0})}
+                                        onChange={(event, newValue) => setTask({ ...task, percentage: newValue as number || 0 })}
                                     />
-                                        
+
                                 </Box>
-                            </div>    
+                            </div>
                         </div>
                     ) : (
                         <div className="dialog-tab-content">
@@ -441,7 +452,7 @@ export function Kanban() {
                                 type="text"
                                 margin="normal"
                                 value={task.title}
-                                onChange={event => setTask({...task, description: event.target.value})}
+                                onChange={event => setTask({ ...task, description: event.target.value })}
                                 disabled={loading}
                                 multiline
                                 rows={4} />
@@ -450,7 +461,7 @@ export function Kanban() {
                 </DialogContent>
 
                 <DialogActions>
-                    
+
                     <Button
                         variant="outlined"
                         size="medium"
@@ -471,7 +482,33 @@ export function Kanban() {
                 </DialogActions>
 
             </Dialog>
-            
+
+            <Snackbar
+                open={success}
+                autoHideDuration={3000}
+                onClose={() => setSuccess(false)}>
+
+                <Alert
+                    variant="filled"
+                    severity="success"
+                    onClose={() => setSuccess(false)}>
+                    {messageSuccess}
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={error.type === 'exception'}
+                autoHideDuration={6000}
+                onClose={() => setError({} as ErrorType)}>
+
+                <Alert
+                    variant="filled"
+                    severity="error"
+                    onClose={() => setError({} as ErrorType)}>
+                    {error.message}
+                </Alert>
+            </Snackbar>
+
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Button, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, TextField, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import { AppBar, Avatar, Button, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, Snackbar, TextField, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import SortIcon from '@material-ui/icons/Sort';
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import imgBgCard from '../../assets/img/card-background.png';
 import './style.scss';
 import { useHistory } from "react-router";
 import { Project } from "../../@types";
+import { Alert } from "@material-ui/lab";
 
 export function Home() {
     const history = useHistory();
@@ -19,6 +20,8 @@ export function Home() {
     const { user, token } = useAuth();
 
     const [error, setError] = useState({} as ErrorType);
+    const [success, setSuccess] = useState(false);
+    const [messageSuccess, setMessageSuccess] = useState('');
 
     const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -75,15 +78,20 @@ export function Home() {
         //Envio o novo projeto para o servidor
         serverAPI.post('/projects', project)
             .then(result => {
-                setProjects([...projects, result.data]);
-                setLoading(false);
+                setProjects([...projects, result.data]);                
                 setOpenDialog(false);
+
+                setSuccess(true);
+                setMessageSuccess('Projeto criado com sucesso!')
             })
             .catch(error => {
                 setError({
                     type: 'exception',
                     message: error.message
                 })
+            })
+            .finally(() => {
+                setLoading(false);
             })
     }
 
@@ -246,6 +254,32 @@ export function Home() {
                 </DialogActions>
 
             </Dialog>
+
+            <Snackbar
+                open={success}
+                autoHideDuration={3000}
+                onClose={() => setSuccess(false)}>
+                
+                <Alert 
+                    variant="filled" 
+                    severity="success"
+                    onClose={() => setSuccess(false)}>
+                    {messageSuccess}
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={error.type === 'exception'}
+                autoHideDuration={6000}
+                onClose={() => setError({} as ErrorType)}>
+                
+                <Alert 
+                    variant="filled" 
+                    severity="error"
+                    onClose={() => setError({} as ErrorType)}>
+                    {error.message}
+                </Alert>
+            </Snackbar>            
         </div>
     )
 }
